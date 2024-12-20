@@ -33,6 +33,7 @@
 #include "usb/vcp_ch34x.hpp"
 #include "usb/vcp_cp210x.hpp"
 #include "usb/vcp_ftdi.hpp"
+#include "usb/vcp_cdc.hpp"
 
 
 static usb_phy_handle_t phy_hdl = NULL;
@@ -62,6 +63,9 @@ const char * esp_usb::getVIDString(){
         case 0x1A86:
             return "CH34X";
             break;
+        case 0x1546:
+            return "ublox";
+            break;
         case 0X0403:
             return "FTDI";
             break;
@@ -83,6 +87,9 @@ const char * esp_usb::getPIDString() {
             break;
         case 0x341:
             return "CH341";
+            break;
+        case 0x01A9:
+            return "F9P";
             break;
         case 0xEA60:
             return "CP2101-CP2104";
@@ -218,6 +225,8 @@ esp_err_t usb_serial_create_task() {
       esp_usb::VCP::register_driver<esp_usb::CP210x>();
       ESP_LOGD("USB_SERIAL","Registering CH34x driver");
       esp_usb::VCP::register_driver<esp_usb::CH34x>();
+      ESP_LOGD("USB_SERIAL","Registering CDC ACM driver");
+      esp_usb::VCP::register_driver<esp_usb::CDC>();
       return ESP_OK;
     } else {
       ESP_LOGE("USB_SERIAL","Failed to install CDC-ACM driver");
